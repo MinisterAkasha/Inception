@@ -13,8 +13,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
-#    volumes:
-#      - "~/Desktop/inception/website:/var/www/html"
+    volumes:
+      - wp:/var/www
     depends_on:
       - wordpress
     restart: always
@@ -30,6 +30,8 @@ services:
     restart: always
     networks:
       - backend
+    volumes:
+      - db:/var/lib/mysql
     environment:
       DB_NAME: ${DB_NAME}
       DB_ROOT: ${DB_ROOT}
@@ -45,6 +47,8 @@ services:
     networks:
       - frontend
       - backend
+    volumes:
+      - wp:/var/www
     depends_on:
       - mariadb
     environment:
@@ -60,4 +64,20 @@ services:
       DOMAIN_NAME: ${DOMAIN_NAME}
       WP_ADMIN_USER_EMAIL: ${WP_ADMIN_USER_EMAIL}
       WP_TITLE: ${WP_TITLE}
+
+volumes:
+  db:
+    name: db
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/user/Desktop/volumes/db
+  wp:
+    name: wp
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/user/Desktop/volumes/wp
 
